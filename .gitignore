@@ -10,7 +10,18 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
-*.local
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Secrets
+*.pem
+*.key
+auth.json
+
+# Local history / cache
+.wata_history
 
 # Editor directories and files
 .vscode/*

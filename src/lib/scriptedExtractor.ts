@@ -20,8 +20,8 @@ export function parseMessageWithScripts(message: string): ExtractedData[] {
     dateMoscow: '',
     tonUrl: '',
     price: '',
-    description: text,
-    comment: '',
+    comment: text,
+    description: '',
     merchantName: ''
   };
 
@@ -32,7 +32,7 @@ export function parseMessageWithScripts(message: string): ExtractedData[] {
   if (lower.includes('чарджбек') || lower.includes('chargeback')) {
     data.type = 'чб';
   } else if (lower.includes('финцерт') || lower.includes('fincert') || lower.includes('запрос от финцерт')) {
-    data.type = 'финцерт';
+    data.type = 'финцерт/банк';
   } else if (lower.includes('жалоба')) {
     data.type = 'Жалоба';
   } else {
@@ -52,6 +52,11 @@ export function parseMessageWithScripts(message: string): ExtractedData[] {
       let m = line.match(/до\s+(\d{2}\.\d{2}\.\d{4})\s*(\d{2}:\d{2})?/i);
       if (m) {
         data.deadline = m[2] ? `${m[1]} ${m[2]}` : m[1];
+      }
+      // Try: "до HH:MM DD.MM.YYYY"
+      if (!data.deadline) {
+        m = line.match(/до\s+(\d{2}:\d{2})\s+(\d{2}\.\d{2}\.\d{4})/i);
+        if (m) data.deadline = `${m[2]} ${m[1]}`;
       }
       // Try: "не позднее HH:MM DD.MM.YYYY"
       if (!data.deadline) {
@@ -188,15 +193,14 @@ export function parseMessageWithScripts(message: string): ExtractedData[] {
     if (m) data.telegramName = m[1];
   }
 
-  // ──────────── COMMENT — full context ────────────
-  // Grab everything from "Плательщик" or "Держатель карты" to the end, up to 300 chars
+  // ──────────── DESCRIPTION (Summary) — full context ────────────
   const commentIdx = text.search(/Плательщик|Держатель\s+карты/i);
   if (commentIdx !== -1) {
-    data.comment = text.substring(commentIdx, commentIdx + 300).replace(/\n/g, ' ').trim();
+    data.description = text.substring(commentIdx, commentIdx + 300).replace(/\n/g, ' ').trim();
   } else {
     // Fallback: take first 2 meaningful lines
     const meaningful = lines.filter(l => l.length > 15);
-    data.comment = meaningful.slice(0, 2).join(' ').substring(0, 200);
+    data.description = meaningful.slice(0, 2).join(' ').substring(0, 200);
   }
 
   // ──────────── FALLBACK: number on 2nd line after keyword ────────────
@@ -207,6 +211,12 @@ export function parseMessageWithScripts(message: string): ExtractedData[] {
         break;
       }
     }
+  }
+
+  // ──────────── DEFAULT DATE ────────────
+  if (!data.dateMoscow) {
+    const now = new Date();
+    data.dateMoscow = `${now.toLocaleDateString('ru-RU')} ${now.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}`;
   }
 
   return [data];

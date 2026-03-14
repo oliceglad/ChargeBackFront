@@ -1,24 +1,6 @@
 import axios from 'axios';
 
-export interface ExtractedData {
-  gateTransactionNumber: string;
-  deadline: string;
-  type: string;
-  urlProject: string;
-  telegramId: string;
-  clientIp: string;
-  starCount: string;
-  telegramName: string;
-  dateMoscow: string;
-  tonUrl: string;
-  price: string;
-  description: string;
-  comment: string;
-  merchantName: string;
-  statusOverride?: string;
-  categoryOverride?: string;
-  screenshots?: string[];
-}
+import { ExtractedData } from '../types';
 
 const SYSTEM_PROMPT = `You are an expert data extraction assistant for chargebacks and FinCert queries. The user will provide one or multiple customer support messages.
 Separate the input into individual cases if multiple are provided.
