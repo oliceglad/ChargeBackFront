@@ -1,76 +1,76 @@
 # ⚡️ WATA CHARGEBACKS
 
-Professional tool for automated data extraction and management of Chargebacks, FinCert queries, and customer complaints.
+Профессиональный инструмент для автоматизированного извлечения данных и управления чарджбеками, запросами ФинЦЕРТ и жалобами клиентов.
 
-![Project Preview](https://via.placeholder.com/800x400.png?text=WATA+CHARGEBACKS+Preview) <!-- Replace with actual screenshot when available -->
+![Preview](https://via.placeholder.com/800x400.png?text=WATA+CHARGEBACKS+Preview) <!-- Замените на реальный скриншот после деплоя -->
 
-## 🚀 Overview
+## 🚀 Обзор
 
-**WATA CHARGEBACKS** is a high-performance web application designed to streamline the routine task of processing chargeback requests. It uses advanced AI (Gemini 2.0 Flash) and robust scripted heuristics to extract structured data from messy support messages, allowing agents to generate documents and sync with Google Sheets in seconds.
+**WATA CHARGEBACKS** — это высокопроизводительное веб-приложение, разработанное для оптимизации рутинных задач по обработке запросов на возврат платежей. Система использует продвинутый ИИ (Gemini 2.0 Flash) и надежные скриптовые алгоритмы для извлечения структурированных данных из неструктурированных сообщений поддержки, позволяя создавать документы и синхронизировать данные с Google Таблицами за считанные секунды.
 
-## ✨ Key Features
+## ✨ Ключевые возможности
 
-- **🤖 Dual Parsing Engine**:
-  - **Gemini AI Mode**: Leverages Google's Gemini 2.0 Flash for intelligent, context-aware data extraction.
-  - **Script Mode**: Ultra-fast, line-by-line regex-based extraction for reliable processing of standardized templates.
-- **🛡️ Fraud Detection (v2026)**:
-  - Automatic tracking of Telegram IDs and IP addresses.
-  - Visual warnings (Red Alert UI) when a user exceeds the threshold (3 reports/day).
-  - Automatic fraud tagging in descriptions.
-- **📄 Document Automation**:
-  - One-click generation of `.docx` files for Chargebacks and FinCert queries.
-  - Support for image/screenshot embedding directly into templates.
-- **📊 Spreadsheet Integration**:
-  - Seamless sync with Google Sheets via webhooks (Google Apps Script).
-- **🎨 Premium UI/UX**:
-  - Minimalist 2026 design system with smooth micro-animations.
-  - Fully responsive layout for Desktop and Mobile.
-  - Secure Settings Modal with password protection for sensitive configurations.
+- **🤖 Двойной движок парсинга**:
+  - **Gemini AI**: Использует Google Gemini 2.0 Flash для интеллектуального извлечения данных с учетом контекста.
+  - **Скриптовый режим**: Сверхбыстрое извлечение на основе регулярных выражений для обработки стандартизированных шаблонов.
+- **🛡️ Система проверки на фрод (v2026)**:
+  - Автоматическое отслеживание Telegram ID и IP-адресов.
+  - Визуальные предупреждения (Red Alert UI), если клиент превышает порог в 3 заявки за сутки.
+  - Автоматическое добавление пометок о подозрении на мошенничество в описания.
+- **📄 Автоматизация документов**:
+  - Генерация `.docx` файлов для чарджбеков и ФинЦЕРТ в один клик.
+  - Поддержка вставки скриншотов прямо в шаблоны документов.
+- **📊 Интеграция с таблицами**:
+  - Бесшовная синхронизация с Google Sheets через вебхуки (Google Apps Script).
+- **🎨 Премиальный UI/UX**:
+  - Минималистичный дизайн по стандартам 2026 года с плавными микро-анимациями.
+  - Полностью адаптивный интерфейс для десктопов и мобильных устройств.
+  - Защищенное модальное окно настроек с паролем для конфиденциальных данных.
 
-## 🛠 Tech Stack
+## 🛠 Стек технологий
 
-- **Core**: React 18 + Vite
-- **Styling**: Tailwind CSS (Glassmorphism & Minimalist Design)
-- **AI**: Google Generative AI (Gemini API)
-- **Icons**: Lucide React
-- **Animations**: CSS Variables + Custom Keyframes
-- **Deployment**: GitHub Actions (CI/CD) + GitHub Pages
+- **Ядро**: React 18 + Vite
+- **Стили**: Tailwind CSS (Glassmorphism & Minimalist Design)
+- **ИИ**: Google Generative AI (Gemini API)
+- **Иконки**: Lucide React
+- **Анимации**: CSS Variables + Custom Keyframes
+- **Деплой**: GitHub Actions (CI/CD) + GitHub Pages
 
-## 📦 Installation & Setup
+## 📦 Установка и запуск
 
-1. **Clone the repository**:
+1. **Клонируйте репозиторий**:
    ```bash
    git clone https://github.com/oliceglad/ChargeBackFront.git
    cd ChargeBackFront/frontend
    ```
 
-2. **Install dependencies**:
+2. **Установите зависимости**:
    ```bash
    npm install
    ```
 
-3. **Run locally**:
+3. **Запустите локально**:
    ```bash
    npm run dev
    ```
 
-4. **Build for production**:
+4. **Сборка для продакшена**:
    ```bash
    npm run build
    ```
 
-## ⚙️ Configuration
+## ⚙️ Настройка
 
-Open the **Settings** (gear icon) in the app to configure:
-- **Gemini API Key**: Required for AI parsing.
-- **Webhook URL**: Your Google Apps Script endpoint for spreadsheet sync.
-- **System Prompt**: Custom instructions for the AI model.
+Откройте **Настройки** (иконка шестеренки) в приложении для конфигурации:
+- **API Ключ Gemini**: Необходим для работы ИИ-парсинга.
+- **Webhook URL**: Ваш эндпоинт Google Apps Script для синхронизации с таблицами.
+- **Системный промпт**: Пользовательские инструкции для модели ИИ.
 
-## 🔒 Security
+## 🔒 Безопасность
 
-- All API keys and configurations are stored in `localStorage` — they never leave your browser.
-- Built-in `.gitignore` prevents accidental leakage of environment files.
-- Refactored according to 2026 security and architecture standards.
+- Все API-ключи и конфигурации хранятся в `localStorage` вашего браузера — они никогда не передаются на сторонние серверы (кроме прямого обращения к Gemini API).
+- Настроенный `.gitignore` предотвращает случайную утечку конфиденциальных файлов.
+- Код отрефакторен согласно стандартам безопасности и архитектуры 2026 года.
 
 ---
-Created with ❤️ by **WATA Team**
+Создано с ❤️ командой **WATA**
