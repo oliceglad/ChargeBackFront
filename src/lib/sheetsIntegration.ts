@@ -1,4 +1,4 @@
-import { ExtractedData } from './gemini';
+import { ExtractedData } from '../types';
 
 export async function appendToGoogleSheets(
   webhookUrl: string,

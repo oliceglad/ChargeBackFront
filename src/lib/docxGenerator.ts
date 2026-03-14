@@ -1,7 +1,7 @@
 import Docxtemplater from 'docxtemplater';
 import PizZip from 'pizzip';
 import { saveAs } from 'file-saver';
-import { ExtractedData } from './gemini';
+import { ExtractedData } from '../types';
 // @ts-ignore
 import ImageModule from 'docxtemplater-image-module-free';
 
@@ -75,7 +75,7 @@ export async function generateDocx(
     // {/screenshots}
     const templateData = {
         ...data,
-        screenshots: data.screenshots?.map(img => ({ image: img })) || []
+        screenshots: data.screenshots?.map((img: string) => ({ image: img })) || []
     };
 
     await doc.renderAsync(templateData);

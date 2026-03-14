@@ -1,4 +1,4 @@
-import { ExtractedData } from './gemini';
+import { ExtractedData } from '../types';
 
 /**
  * Scripted extractor — line-by-line approach for maximum reliability.
@@ -22,7 +22,8 @@ export function parseMessageWithScripts(message: string): ExtractedData[] {
     price: '',
     comment: text,
     description: '',
-    merchantName: ''
+    merchantName: '',
+    screenshots: []
   };
 
   const lower = text.toLowerCase();
