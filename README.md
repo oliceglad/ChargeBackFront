@@ -1,50 +1,76 @@
-# React + TypeScript + Vite
+# ⚡️ WATA CHARGEBACKS
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Professional tool for automated data extraction and management of Chargebacks, FinCert queries, and customer complaints.
 
-Currently, two official plugins are available:
+![Project Preview](https://via.placeholder.com/800x400.png?text=WATA+CHARGEBACKS+Preview) <!-- Replace with actual screenshot when available -->
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Overview
 
-## Expanding the ESLint configuration
+**WATA CHARGEBACKS** is a high-performance web application designed to streamline the routine task of processing chargeback requests. It uses advanced AI (Gemini 2.0 Flash) and robust scripted heuristics to extract structured data from messy support messages, allowing agents to generate documents and sync with Google Sheets in seconds.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## ✨ Key Features
 
-- Configure the top-level `parserOptions` property like this:
+- **🤖 Dual Parsing Engine**:
+  - **Gemini AI Mode**: Leverages Google's Gemini 2.0 Flash for intelligent, context-aware data extraction.
+  - **Script Mode**: Ultra-fast, line-by-line regex-based extraction for reliable processing of standardized templates.
+- **🛡️ Fraud Detection (v2026)**:
+  - Automatic tracking of Telegram IDs and IP addresses.
+  - Visual warnings (Red Alert UI) when a user exceeds the threshold (3 reports/day).
+  - Automatic fraud tagging in descriptions.
+- **📄 Document Automation**:
+  - One-click generation of `.docx` files for Chargebacks and FinCert queries.
+  - Support for image/screenshot embedding directly into templates.
+- **📊 Spreadsheet Integration**:
+  - Seamless sync with Google Sheets via webhooks (Google Apps Script).
+- **🎨 Premium UI/UX**:
+  - Minimalist 2026 design system with smooth micro-animations.
+  - Fully responsive layout for Desktop and Mobile.
+  - Secure Settings Modal with password protection for sensitive configurations.
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+## 🛠 Tech Stack
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+- **Core**: React 18 + Vite
+- **Styling**: Tailwind CSS (Glassmorphism & Minimalist Design)
+- **AI**: Google Generative AI (Gemini API)
+- **Icons**: Lucide React
+- **Animations**: CSS Variables + Custom Keyframes
+- **Deployment**: GitHub Actions (CI/CD) + GitHub Pages
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+## 📦 Installation & Setup
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/oliceglad/ChargeBackFront.git
+   cd ChargeBackFront/frontend
+   ```
+
+2. **Install dependencies**:
+   ```bash
+   npm install
+   ```
+
+3. **Run locally**:
+   ```bash
+   npm run dev
+   ```
+
+4. **Build for production**:
+   ```bash
+   npm run build
+   ```
+
+## ⚙️ Configuration
+
+Open the **Settings** (gear icon) in the app to configure:
+- **Gemini API Key**: Required for AI parsing.
+- **Webhook URL**: Your Google Apps Script endpoint for spreadsheet sync.
+- **System Prompt**: Custom instructions for the AI model.
+
+## 🔒 Security
+
+- All API keys and configurations are stored in `localStorage` — they never leave your browser.
+- Built-in `.gitignore` prevents accidental leakage of environment files.
+- Refactored according to 2026 security and architecture standards.
+
+---
+Created with ❤️ by **WATA Team**
