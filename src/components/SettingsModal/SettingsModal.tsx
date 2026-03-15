@@ -64,7 +64,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
               onChange={e => {
                   const val = e.target.value;
                   setGoogleWebhookUrl(val);
-                  localStorage.setItem('wata_google_webhook_url', val);
+                  localStorage.setItem('google_webhook_url', val);
               }}
               placeholder="https://script.google.com/macros/s/..."
               className={`w-full bg-zinc-900 border ${!googleWebhookUrl ? 'border-amber-500/50' : 'border-zinc-800'} p-3 text-xs text-white focus:outline-none focus:border-[#D4FF00]`}
@@ -107,7 +107,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
                       onChange={e => {
                           const val = e.target.value;
                           setGeminiApiKey(val);
-                          localStorage.setItem('wata_gemini_api_key', val);
+                          localStorage.setItem('gemini_api_key', val);
                       }}
                       placeholder="AIza..."
                       className="w-full bg-zinc-900 border border-zinc-800 p-3 text-xs text-white focus:outline-none focus:border-[#D4FF00]"

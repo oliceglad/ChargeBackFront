@@ -4,7 +4,7 @@ import { ReportHistoryEntry } from '../types';
 export const useFraudDetection = (maxEntries = 500) => {
   const [history, setHistory] = useState<ReportHistoryEntry[]>(() => {
     try {
-      return JSON.parse(localStorage.getItem('wata_reports_history') || '[]');
+      return JSON.parse(localStorage.getItem('reports_history') || '[]');
     } catch {
       return [];
     }
@@ -15,7 +15,7 @@ export const useFraudDetection = (maxEntries = 500) => {
     const newEntry: ReportHistoryEntry = { tg, ip, date: new Date().toISOString() };
     setHistory(prev => {
       const next = [newEntry, ...prev].slice(0, maxEntries);
-      localStorage.setItem('wata_reports_history', JSON.stringify(next));
+      localStorage.setItem('reports_history', JSON.stringify(next));
       return next;
     });
   }, [maxEntries]);
@@ -32,7 +32,7 @@ export const useFraudDetection = (maxEntries = 500) => {
 
   const clearHistory = useCallback(() => {
     setHistory([]);
-    localStorage.removeItem('wata_reports_history');
+    localStorage.removeItem('reports_history');
   }, []);
 
   return { history, addToHistory, getFraudCount, clearHistory };

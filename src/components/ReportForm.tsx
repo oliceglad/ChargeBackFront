@@ -48,9 +48,9 @@ export default function ReportForm() {
   const [showSettings, setShowSettings] = useState(false);
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [passwordInput, setPasswordInput] = useState('');
-  const [geminiApiKey, setGeminiApiKey] = useState(() => localStorage.getItem('wata_gemini_api_key') || '');
-  const [googleWebhookUrl, setGoogleWebhookUrl] = useState(() => localStorage.getItem('wata_google_webhook_url') || '');
-  const [systemPrompt, setSystemPrompt] = useState(() => localStorage.getItem('wata_system_prompt') || DEFAULT_SYSTEM_PROMPT);
+  const [geminiApiKey, setGeminiApiKey] = useState(() => localStorage.getItem('gemini_api_key') || '');
+  const [googleWebhookUrl, setGoogleWebhookUrl] = useState(() => localStorage.getItem('google_webhook_url') || '');
+  const [systemPrompt, setSystemPrompt] = useState(() => localStorage.getItem('system_prompt') || DEFAULT_SYSTEM_PROMPT);
 
   // Fraud Detection Hook
   const { history, addToHistory, getFraudCount, clearHistory } = useFraudDetection();
@@ -71,7 +71,7 @@ export default function ReportForm() {
     if (!geminiApiKey) {
       if (isGeminiKeyFormat(passwordInput)) {
         setGeminiApiKey(passwordInput);
-        localStorage.setItem('wata_gemini_api_key', passwordInput);
+        localStorage.setItem('gemini_api_key', passwordInput);
         setIsUnlocked(true);
         setPasswordInput('');
       } else {
@@ -89,9 +89,9 @@ export default function ReportForm() {
   }, [geminiApiKey, passwordInput]);
 
   const handleSaveSettings = () => {
-    localStorage.setItem('wata_system_prompt', systemPrompt);
-    localStorage.setItem('wata_gemini_api_key', geminiApiKey);
-    localStorage.setItem('wata_google_webhook_url', googleWebhookUrl);
+    localStorage.setItem('system_prompt', systemPrompt);
+    localStorage.setItem('gemini_api_key', geminiApiKey);
+    localStorage.setItem('google_webhook_url', googleWebhookUrl);
     alert('Настройки сохранены');
     setShowSettings(false);
   };
@@ -308,7 +308,7 @@ export default function ReportForm() {
               value={geminiApiKey}
               onChange={e => {
                 setGeminiApiKey(e.target.value);
-                localStorage.setItem('wata_gemini_api_key', e.target.value);
+                localStorage.setItem('gemini_api_key', e.target.value);
               }}
               className="flex-1 bg-transparent border-none text-[10px] text-zinc-200 outline-none"
               placeholder="API Key..."
