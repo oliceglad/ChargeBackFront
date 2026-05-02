@@ -15,7 +15,7 @@ export async function appendToGoogleSheets(
     transactionNumber: data.gateTransactionNumber || '',
     status: data.statusOverride || 'Информация передана в шлюз',
     date: `'${currentDate}`,
-    comment: data.comment || '',
+    comment: data.description || data.comment || '',
     deadline: data.deadline ? `'${data.deadline}` : ''
   };
 

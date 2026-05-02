@@ -10,6 +10,7 @@ export function parseMessageWithScripts(message: string): ExtractedData[] {
 
   const data: ExtractedData = {
     gateTransactionNumber: '',
+    transactionId: '',
     deadline: '',
     type: 'чб',
     urlProject: '',
@@ -23,7 +24,10 @@ export function parseMessageWithScripts(message: string): ExtractedData[] {
     comment: text,
     description: '',
     merchantName: '',
-    screenshots: []
+    screenshots: [],
+    categoryOverride: 'Other',
+    statusOverride: 'Информация у мерча',
+    isSelected: true
   };
 
   const lower = text.toLowerCase();
@@ -71,10 +75,19 @@ export function parseMessageWithScripts(message: string): ExtractedData[] {
       }
     }
 
-    // --- ID заказа: UUID ---
-    if (!data.gateTransactionNumber && lineLower.includes('id заказа')) {
-      const m = line.match(/ID\s+заказа:?\s*([A-Za-z0-9\-]{8,})/i);
-      if (m) data.gateTransactionNumber = m[1];
+    // --- ID заказа: UUID / Order ID: UUID ---
+    if (!data.transactionId && (lineLower.includes('id заказа') || lineLower.includes('order id'))) {
+      const m = line.match(/(?:ID\s+заказа|Order\s+ID):?\s*([A-Za-z0-9\-]{8,})/i);
+      if (m) {
+        // If it looks like a UUID or long ID, put it in transactionId
+        if (m[1].includes('-') && m[1].length > 15) {
+          data.transactionId = m[1];
+        } else if (!data.gateTransactionNumber) {
+          data.gateTransactionNumber = m[1];
+        } else {
+          data.transactionId = m[1];
+        }
+      }
     }
 
     // --- ID в платежной системе: UUID ---
@@ -163,11 +176,12 @@ export function parseMessageWithScripts(message: string): ExtractedData[] {
       if (m) data.starCount = m[1];
     }
 
-    // --- Table row: "13.03.2026 11:11  890005969  UUID  2320.00  RUB" ---
-    if (!data.gateTransactionNumber) {
-      const m = line.match(/(\d{2}\.\d{2}\.\d{4})\s+(\d{2}:\d{2})\s+(\d{6,})\s+([A-Za-z0-9\-]{8,})\s+([\d.]+)\s+(RUB|USD|EUR)/i);
+    // --- Table row: "15.04.2026 09:09 916301360 3a20a1ee-d1c0-2c1c-368d-331a4084a86a 62,97 RUB" ---
+    if (!data.gateTransactionNumber || !data.transactionId) {
+      const m = line.match(/(\d{2}\.\d{2}\.\d{4})\s+(\d{2}:\d{2})\s+(\d{6,})\s+([A-Za-z0-9\-]{8,})\s+([\d.,]+)\s+(RUB|USD|EUR)/i);
       if (m) {
         data.gateTransactionNumber = m[3];
+        data.transactionId = m[4];
         if (!data.dateMoscow) data.dateMoscow = `${m[1]} ${m[2]}`;
         if (!data.price) data.price = `${m[5]} ${m[6]}`;
       }

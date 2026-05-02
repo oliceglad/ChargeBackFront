@@ -112,10 +112,13 @@ export default function ReportForm() {
       description: '',
       comment: '',
       merchantName: '',
+      categoryOverride: 'Other',
+      statusOverride: 'Информация у мерча',
+      isSelected: true,
       screenshots: []
     };
-    setDataList(prev => [newItem, ...prev]);
-    setCurrentIndex(0);
+    setDataList(prev => [...prev, newItem]);
+    setCurrentIndex(dataList.length);
   };
 
   const handleRemoveItem = (index: number) => {
@@ -163,7 +166,7 @@ export default function ReportForm() {
 
   const handleParseItem = (index: number) => {
     const item = dataList[index];
-    const sourceText = item.comment || item.description;
+    const sourceText = item.description || item.comment;
     if (!sourceText) return;
     
     const parsedResults = parseMessageWithScripts(sourceText);
@@ -201,7 +204,13 @@ export default function ReportForm() {
       } else {
         results = parseMessageWithScripts(message);
       }
-      setDataList(results.map(r => ({ ...r, screenshots: [] })));
+      setDataList(results.map(r => ({ 
+        ...r, 
+        categoryOverride: r.categoryOverride || 'Other',
+        statusOverride: r.statusOverride || 'Информация у мерча',
+        isSelected: true,
+        screenshots: [] 
+      })));
       setCurrentIndex(0);
       setStatusMsg('');
     } catch (err) {
@@ -214,6 +223,7 @@ export default function ReportForm() {
 
   const handleGenerateReports = async (docType: 'Chargeback' | 'FinCert') => {
     const filtered = dataList.filter(item => {
+      if (item.isSelected === false) return false;
       const t = (item.type || '').toLowerCase();
       if (docType === 'Chargeback') return t === 'чб' || t.includes('chargeback') || t === 'жалоба';
       return t.includes('финцерт') || t.includes('банк') || t.includes('fincert');
@@ -244,10 +254,16 @@ export default function ReportForm() {
       alert('Укажите Webhook URL');
       return;
     }
+    const selectedList = dataList.filter(d => d.isSelected !== false);
+    if (selectedList.length === 0) {
+      alert('Нет выбранных записей');
+      return;
+    }
+
     setLoading(true);
     setStatusMsg('Выгрузка в таблицу...');
     let count = 0;
-    for (const item of dataList) {
+    for (const item of selectedList) {
       try {
         const fraudCount = getFraudCount(item.telegramId || '', item.clientIp || '');
         const finalItem = fraudCount >= 2 
@@ -260,7 +276,7 @@ export default function ReportForm() {
       } catch (err) { console.error(err); }
     }
     setLoading(false);
-    setStatusMsg(`Выгружено: ${count} из ${dataList.length}`);
+    setStatusMsg(`Выгружено: ${count} из ${selectedList.length}`);
     setTimeout(() => setStatusMsg(''), 4000);
   };
 
@@ -343,6 +359,46 @@ export default function ReportForm() {
 
       {dataList.length > 0 && (
         <div className="mt-8 space-y-6">
+          <div className="bg-zinc-900/30 border border-zinc-800 p-4 rounded-xl flex flex-col gap-2 max-h-48 overflow-y-auto">
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Список транзакций для скачивания/выгрузки</h3>
+              <button 
+                onClick={() => {
+                  const allSelected = dataList.every(d => d.isSelected ?? true);
+                  setDataList(prev => prev.map(d => ({ ...d, isSelected: !allSelected })));
+                }}
+                className="text-[10px] text-[#D4FF00] hover:underline uppercase tracking-widest"
+              >
+                {dataList.every(d => d.isSelected ?? true) ? 'Снять все' : 'Выбрать все'}
+              </button>
+            </div>
+            {dataList.map((data, index) => (
+              <label key={index} className="flex items-center gap-3 cursor-pointer group p-2 hover:bg-zinc-800/50 rounded transition-colors border border-transparent hover:border-zinc-800">
+                <input 
+                  type="checkbox"
+                  checked={data.isSelected ?? true}
+                  onChange={(e) => handleUpdateItem(index, 'isSelected', e.target.checked)}
+                  className="w-4 h-4 accent-[#D4FF00] cursor-pointer"
+                />
+                <span className="text-xs text-zinc-300 font-mono flex-1">
+                  <span className="text-zinc-500 mr-2">#{index + 1}</span>
+                  {data.gateTransactionNumber || 'Нет номера'} 
+                  {data.transactionId ? ` | ${data.transactionId.substring(0,8)}...` : ''} 
+                  <span className="text-zinc-500 ml-2">({data.type})</span>
+                </span>
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setCurrentIndex(index);
+                  }}
+                  className="text-[10px] bg-zinc-800 text-zinc-400 px-2 py-1 rounded hover:text-white"
+                >
+                  Перейти
+                </button>
+              </label>
+            ))}
+          </div>
+
           <div className="relative overflow-hidden">
             {dataList.map((data, index) => (
               <RecordCard 
@@ -366,13 +422,13 @@ export default function ReportForm() {
               onClick={() => handleGenerateReports('Chargeback')}
               className="flex-1 flex justify-center items-center gap-2 py-4 bg-zinc-900/50 hover:bg-zinc-800 hover:border-[#D4FF00] text-zinc-400 hover:text-white font-bold text-[10px] uppercase tracking-widest border border-zinc-800 transition-all rounded-lg group"
             >
-              <Download className="w-4 h-4 group-hover:animate-bounce" /> DOCX ЧБ ({dataList.filter(d => (d.type || '').toLowerCase() === 'чб' || (d.type || '').toLowerCase() === 'жалоба').length})
+              <Download className="w-4 h-4 group-hover:animate-bounce" /> DOCX ЧБ ({dataList.filter(d => (d.isSelected ?? true) && ((d.type || '').toLowerCase() === 'чб' || (d.type || '').toLowerCase() === 'жалоба')).length})
             </button>
             <button
               onClick={() => handleGenerateReports('FinCert')}
               className="flex-1 flex justify-center items-center gap-2 py-4 bg-zinc-900/50 hover:bg-zinc-800 hover:border-[#D4FF00] text-zinc-400 hover:text-white font-bold text-[10px] uppercase tracking-widest border border-zinc-800 transition-all rounded-lg group"
             >
-              <Download className="w-4 h-4 group-hover:animate-bounce" /> DOCX Финцерт ({dataList.filter(d => (d.type || '').toLowerCase().includes('финцерт')).length})
+              <Download className="w-4 h-4 group-hover:animate-bounce" /> DOCX Финцерт ({dataList.filter(d => (d.isSelected ?? true) && (d.type || '').toLowerCase().includes('финцерт')).length})
             </button>
             <button
               onClick={handleSendToSheets}

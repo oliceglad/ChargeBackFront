@@ -7,6 +7,7 @@ Separate the input into individual cases if multiple are provided.
 
 For EACH case, extract the following fields into a JSON array of objects:
 - gateTransactionNumber: Extract the exact transaction number/ID
+- transactionId: Extract the UUID or other format specifically for transaction ID
 - deadline: Extract the date and time requested for the response
 - comment: Generate a brief, clear summary of the customer's issue based on the message
 - type: Determine if it's 'чб' (chargeback), 'финцерт/банк', or 'Жалоба' (deduce from context)
