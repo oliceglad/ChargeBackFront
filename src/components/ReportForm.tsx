@@ -359,8 +359,8 @@ export default function ReportForm() {
 
       {dataList.length > 0 && (
         <div className="mt-8 space-y-6">
-          <div className="bg-zinc-900/30 border border-zinc-800 p-4 rounded-xl flex flex-col gap-2 max-h-48 overflow-y-auto">
-            <div className="flex items-center justify-between mb-2">
+          <div className="bg-zinc-900/30 border border-zinc-800 p-4 rounded-xl flex flex-col gap-2 max-h-64">
+            <div className="flex items-center justify-between mb-2 shrink-0">
               <h3 className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Список транзакций для скачивания/выгрузки</h3>
               <button 
                 onClick={() => {
@@ -372,31 +372,33 @@ export default function ReportForm() {
                 {dataList.every(d => d.isSelected ?? true) ? 'Снять все' : 'Выбрать все'}
               </button>
             </div>
-            {dataList.map((data, index) => (
-              <label key={index} className="flex items-center gap-3 cursor-pointer group p-2 hover:bg-zinc-800/50 rounded transition-colors border border-transparent hover:border-zinc-800">
-                <input 
-                  type="checkbox"
-                  checked={data.isSelected ?? true}
-                  onChange={(e) => handleUpdateItem(index, 'isSelected', e.target.checked)}
-                  className="w-4 h-4 accent-[#D4FF00] cursor-pointer"
-                />
-                <span className="text-xs text-zinc-300 font-mono flex-1">
-                  <span className="text-zinc-500 mr-2">#{index + 1}</span>
-                  {data.gateTransactionNumber || 'Нет номера'} 
-                  {data.transactionId ? ` | ${data.transactionId.substring(0,8)}...` : ''} 
-                  <span className="text-zinc-500 ml-2">({data.type})</span>
-                </span>
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setCurrentIndex(index);
-                  }}
-                  className="text-[10px] bg-zinc-800 text-zinc-400 px-2 py-1 rounded hover:text-white"
-                >
-                  Перейти
-                </button>
-              </label>
-            ))}
+            <div className="overflow-y-auto flex flex-col gap-2 pr-1 min-h-0">
+              {dataList.map((data, index) => (
+                <label key={index} className="flex items-center gap-3 cursor-pointer group p-2 hover:bg-zinc-800/50 rounded transition-colors border border-transparent hover:border-zinc-800 shrink-0 overflow-hidden">
+                  <input 
+                    type="checkbox"
+                    checked={data.isSelected ?? true}
+                    onChange={(e) => handleUpdateItem(index, 'isSelected', e.target.checked)}
+                    className="w-4 h-4 accent-[#D4FF00] cursor-pointer shrink-0"
+                  />
+                  <span className="text-xs text-zinc-300 font-mono flex-1 truncate">
+                    <span className="text-zinc-500 mr-2">#{index + 1}</span>
+                    {data.gateTransactionNumber || 'Нет номера'} 
+                    {data.transactionId ? ` | ${data.transactionId.substring(0,8)}...` : ''} 
+                    <span className="text-zinc-500 ml-2">({data.type})</span>
+                  </span>
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setCurrentIndex(index);
+                    }}
+                    className="text-[10px] bg-zinc-800 text-zinc-400 px-2 py-1 rounded hover:text-white shrink-0"
+                  >
+                    Перейти
+                  </button>
+                </label>
+              ))}
+            </div>
           </div>
 
           <div className="relative overflow-hidden">
